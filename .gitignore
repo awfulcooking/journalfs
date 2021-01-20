@@ -8,7 +8,11 @@
 *.dll
 *.dylib
 *.so
-/cmd/cmd
+
+# ignore all files in /cmd without an extension
+/cmd/**/*
+!/cmd/**/*/
+!/cmd/**/*.*
 
 *.test
 

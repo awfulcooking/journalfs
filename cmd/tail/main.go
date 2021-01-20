@@ -8,10 +8,14 @@ import (
 	"github.com/coreos/go-systemd/sdjournal"
 )
 
-func main() {
-	unit := flag.String("unit", "", "systemd unit name")
-	flag.Parse()
+var unit = flag.String("unit", "", "systemd unit name")
+var numPrevious = flag.Uint64("n", 10, "number of previous journal messages to display")
 
+func init() {
+	flag.Parse()
+}
+
+func main() {
 	j, err := sdjournal.NewJournal()
 	if err != nil {
 		fmt.Println("error:", err)
@@ -28,19 +32,30 @@ func main() {
 	}
 
 	j.SeekTail()
-	j.Previous()
+	j.PreviousSkip(*numPrevious + 1)
 
 	for {
-		entry, _ := j.GetEntry()
+		count, err := j.Next()
+		must(err)
 
-		// printJSON(entry.Fields)
+		if count == 1 {
+			entry, err := j.GetEntry()
+			must(err)
 
-		fmt.Printf("[%s] %s\n", entry.Fields["SYSLOG_IDENTIFIER"], entry.Fields["MESSAGE"])
-
-		size, _ := j.Next()
-		if size == 0 {
+			fmt.Printf(
+				"[%s] %s\n",
+				entry.Fields[sdjournal.SD_JOURNAL_FIELD_SYSLOG_IDENTIFIER],
+				entry.Fields[sdjournal.SD_JOURNAL_FIELD_MESSAGE],
+			)
+		} else {
 			j.Wait(sdjournal.IndefiniteWait)
 		}
+	}
+}
+
+func must(err error) {
+	if err != nil {
+		panic(err)
 	}
 }
 
