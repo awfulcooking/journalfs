@@ -1,0 +1,15 @@
+.vscode
+
+*~
+
+*.swp
+
+*.exe
+*.dll
+*.dylib
+*.so
+/cmd/cmd
+
+*.test
+
+*.out
