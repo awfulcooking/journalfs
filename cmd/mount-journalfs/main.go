@@ -12,7 +12,7 @@ import (
 	"github.com/togetherbeer/journalfs/mount"
 )
 
-var mountPath = flag.String("p", "./journal", "mount path")
+var mountPath = flag.String("p", "/var/log/journalfs", "mount path")
 
 func init() {
 	flag.Parse()
@@ -31,7 +31,7 @@ func main() {
 
 	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
 
-	fmt.Println("Running")
+	fmt.Println("Serving", *mountPath)
 	<-stop
 
 	fmt.Println("Got stop signal. Unmounting..")
