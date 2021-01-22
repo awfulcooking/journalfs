@@ -10,16 +10,16 @@ import (
 	"github.com/coreos/go-systemd/sdjournal"
 )
 
-type FileUnitLog struct {
+type UnitLogFile struct {
 	unit string
 
 	entries []*sdjournal.JournalEntry
 }
 
-var _ fs.Node = (*FileUnitLog)(nil)
-var _ fs.HandleReadAller = (*FileUnitLog)(nil)
+var _ fs.Node = (*UnitLogFile)(nil)
+var _ fs.HandleReadAller = (*UnitLogFile)(nil)
 
-func (f *FileUnitLog) Attr(ctx context.Context, attr *fuse.Attr) error {
+func (f *UnitLogFile) Attr(ctx context.Context, attr *fuse.Attr) error {
 	attr.Inode = 1
 	attr.Mode = 0o444
 	attr.Size = uint64(len(f.data()))
@@ -27,12 +27,11 @@ func (f *FileUnitLog) Attr(ctx context.Context, attr *fuse.Attr) error {
 	return nil
 }
 
-func (f *FileUnitLog) ReadAll(ctx context.Context) ([]byte, error) {
-	fmt.Println("ReadAll()")
+func (f *UnitLogFile) ReadAll(ctx context.Context) ([]byte, error) {
 	return f.data(), nil
 }
 
-func (f *FileUnitLog) data() []byte {
+func (f *UnitLogFile) data() []byte {
 	var log []string
 
 	for _, entry := range f.entries {
