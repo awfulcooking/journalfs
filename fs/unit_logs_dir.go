@@ -35,7 +35,7 @@ func NewUnitLogsDir(jc *journalcache.JournalCache, unitType string) *UnitLogsDir
 
 func (d *UnitLogsDir) Attr(ctx context.Context, attr *fuse.Attr) error {
 	attr.Inode = 1
-	attr.Mode = os.ModeDir | 0o555
+	attr.Mode = os.ModeDir | 0o550
 	attr.Size = uint64(len(d.matchingUnitNames()))
 
 	return nil

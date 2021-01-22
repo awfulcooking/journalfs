@@ -21,7 +21,7 @@ var _ fs.HandleReadAller = (*UnitLogFile)(nil)
 
 func (f *UnitLogFile) Attr(ctx context.Context, attr *fuse.Attr) error {
 	attr.Inode = 1
-	attr.Mode = 0o444
+	attr.Mode = 0o440
 	attr.Size = uint64(len(f.data()))
 
 	return nil
