@@ -25,7 +25,9 @@ func main() {
 	fmt.Printf("Loaded %d entries.\n", count)
 
 	mount := mount.NewMount(*mountPath, journalCache)
-	go mount.Serve()
+	go func() {
+		must(mount.Serve())
+	}()
 
 	stop := make(chan os.Signal, 1)
 
