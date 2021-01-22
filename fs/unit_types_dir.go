@@ -21,6 +21,8 @@ var _ fs.HandleReadDirAller = (*UnitTypesDir)(nil)
 var _ fs.NodeStringLookuper = (*UnitTypesDir)(nil)
 
 func (d *UnitTypesDir) Attr(ctx context.Context, attr *fuse.Attr) error {
+	attr.Uid = UID
+	attr.Gid = GID
 	attr.Mode = os.ModeDir | 0o550
 	attr.Size = uint64(len(d.typeDirs))
 
