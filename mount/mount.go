@@ -25,6 +25,7 @@ func (m *Mount) Serve() error {
 		fuse.FSName("journalfs"),
 		fuse.Subtype("journalfs"),
 		fuse.ReadOnly(),
+		fuse.DefaultPermissions(), // ask kernel to perform file-mode based access control
 		fuse.AllowOther(),
 	)
 	if err != nil {
