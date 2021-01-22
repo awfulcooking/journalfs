@@ -34,6 +34,7 @@ func main() {
 	fmt.Println("Serving", *mountPath)
 	<-stop
 
+	fmt.Println()
 	fmt.Println("Got stop signal. Unmounting..")
 
 	unmountErr := mount.Unmount()
