@@ -20,7 +20,6 @@ var _ fs.Node = (*UnitLogFile)(nil)
 var _ fs.HandleReadAller = (*UnitLogFile)(nil)
 
 func (f *UnitLogFile) Attr(ctx context.Context, attr *fuse.Attr) error {
-	attr.Inode = 1
 	attr.Uid = UID
 	attr.Gid = GID
 	attr.Mode = 0o440
