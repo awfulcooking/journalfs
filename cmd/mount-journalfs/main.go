@@ -13,9 +13,18 @@ import (
 )
 
 var mountPath = flag.String("p", "/var/log/journalfs", "mount path")
+var allowOther = flag.Bool("allowOther", false, "allow other users to access the filesystem. user_allow_other must be enabled in /etc/fuse.conf to use this option without being root")
 
 func init() {
 	flag.Parse()
+}
+
+func mountOptions() []mount.MountOption {
+	var options []mount.MountOption
+	if *allowOther {
+		options = append(options, mount.AllowOther)
+	}
+	return options
 }
 
 func main() {
@@ -25,15 +34,16 @@ func main() {
 	fmt.Printf("Loaded %d entries.\n", count)
 
 	mount := mount.NewMount(*mountPath, journalCache)
+
 	go func() {
-		must(mount.Serve())
+		must(mount.Serve(mountOptions()...))
 	}()
 
-	stop := make(chan os.Signal, 1)
+	fmt.Println("Serving", *mountPath)
 
+	stop := make(chan os.Signal, 1)
 	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM)
 
-	fmt.Println("Serving", *mountPath)
 	<-stop
 
 	fmt.Println()

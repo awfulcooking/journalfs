@@ -19,15 +19,18 @@ func (m *Mount) Dir() string {
 	return m.dir
 }
 
-func (m *Mount) Serve() error {
-	conn, err := fuse.Mount(
-		m.dir,
+func (m *Mount) Serve(options ...MountOption) error {
+	fuseOptions := []fuse.MountOption{
 		fuse.FSName("journalfs"),
 		fuse.Subtype("journalfs"),
 		fuse.ReadOnly(),
 		fuse.DefaultPermissions(), // ask kernel to perform file-mode based access control
-		fuse.AllowOther(),
-	)
+	}
+
+	fuseOptions = append(fuseOptions, fuseMountOptions(options)...)
+
+	conn, err := fuse.Mount(m.dir, fuseOptions...)
+
 	if err != nil {
 		return err
 	}
