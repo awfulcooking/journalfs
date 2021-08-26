@@ -57,7 +57,7 @@ func (d *UnitLogsDir) ReadDirAll(ctx context.Context) ([]fuse.Dirent, error) {
 
 func (d *UnitLogsDir) matchingUnitNames() []string {
 	var names []string
-	for name, _ := range d.journalCache.EntriesByUnit() {
+	for _, name := range d.journalCache.UnitNames() {
 		if strings.HasSuffix(name, "."+d.Type) {
 			names = append(names, name)
 		}
@@ -78,12 +78,8 @@ func (d *UnitLogsDir) Lookup(ctx context.Context, name string) (bzfs.Node, error
 func (d *UnitLogsDir) unitFile(name string) bzfs.Node {
 	if node, ok := d.logFiles[name]; ok {
 		return node
-	} else if entries, ok := d.journalCache.EntriesByUnit()[name]; ok {
-		d.logFiles[name] = &UnitLogFile{
-			unit:    name,
-			entries: entries,
-		}
-
+	} else if entries := d.journalCache.EntriesByUnit(name); len(entries) > 0 {
+		d.logFiles[name] = NewUnitLogFile(d.journalCache, name)
 		return d.logFiles[name]
 	}
 

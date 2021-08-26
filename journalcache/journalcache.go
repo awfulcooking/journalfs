@@ -1,6 +1,9 @@
 package journalcache
 
 import (
+	"errors"
+	"log"
+
 	"github.com/coreos/go-systemd/sdjournal"
 )
 
@@ -9,21 +12,32 @@ import (
 type JournalCache struct {
 	journal *sdjournal.Journal
 
-	entries       []*sdjournal.JournalEntry
-	entriesByUnit map[string][]*sdjournal.JournalEntry
+	entries       []*JournalEntry
+	entriesByUnit map[string][]*JournalEntry
+
+	following bool
+	Debug bool
 }
 
 func (jc *JournalCache) Reset() {
-	jc.entries = make([]*sdjournal.JournalEntry, 0)
-	jc.entriesByUnit = make(map[string][]*sdjournal.JournalEntry)
+	jc.entries = make([]*JournalEntry, 0)
+	jc.entriesByUnit = make(map[string][]*JournalEntry)
 }
 
-func (jc *JournalCache) Entries() []*sdjournal.JournalEntry {
+func (jc *JournalCache) Entries() []*JournalEntry {
 	return jc.entries
 }
 
-func (jc *JournalCache) EntriesByUnit() map[string][]*sdjournal.JournalEntry {
-	return jc.entriesByUnit
+func (jc *JournalCache) EntriesByUnit(unit string) []*JournalEntry {
+	return jc.entriesByUnit[unit]
+}
+
+func (jc *JournalCache) UnitNames() []string {
+	names := make([]string, len(jc.entriesByUnit))
+	for name, _ := range jc.entriesByUnit {
+		names = append(names, name)
+	}
+	return names
 }
 
 func (jc *JournalCache) MatchUnit(unit string) error {
@@ -58,15 +72,49 @@ func (jc *JournalCache) Load() (int, error) {
 	}
 }
 
-func (jc *JournalCache) addEntry(entry *sdjournal.JournalEntry) {
-	jc.entries = append(jc.entries, entry)
+func (jc *JournalCache) Follow() error {
+	if jc.Debug {
+		log.Println("Follow()")
+	}
+	if jc.following {
+		return errors.New("already following")
+	}
+	jc.following = true
+	go jc.follow()
+	return nil
+}
 
-	if unit, ok := entry.Fields[sdjournal.SD_JOURNAL_FIELD_SYSTEMD_UNIT]; ok {
-		if jc.entriesByUnit[unit] == nil {
-			jc.entriesByUnit[unit] = make([]*sdjournal.JournalEntry, 0)
+func (jc *JournalCache) follow() {
+	for {
+		jc.journal.Wait(sdjournal.IndefiniteWait)
+
+		if count, err := jc.journal.Next(); err != nil {
+			panic(err)
+		} else if count == 1 {
+			entry, err := jc.journal.GetEntry()
+			if err != nil {
+				panic(err)
+			}
+
+			jc.addEntry(entry)
 		}
+	}
+}
 
-		jc.entriesByUnit[unit] = append(jc.entriesByUnit[unit], entry)
+func (jc *JournalCache) addEntry(sdjournalEntry *sdjournal.JournalEntry) {
+	entry := makeJournalEntry(sdjournalEntry)
+
+	if jc.Debug {
+		log.Println("New entry", entry)
+	}
+
+	jc.entries = append(jc.entries, &entry)
+
+	if entry.Unit != "" {
+		if jc.entriesByUnit[entry.Unit] == nil {
+			jc.entriesByUnit[entry.Unit] = make([]*JournalEntry, 0)
+		}
+		jc.entriesByUnit[entry.Unit] = append(jc.entriesByUnit[entry.Unit], &entry)
 	}
 }
 
@@ -76,8 +124,9 @@ func NewJournalCache() (*JournalCache, error) {
 
 	if journal, err = sdjournal.NewJournal(); err == nil {
 		cache := &JournalCache{
-			journal: journal,
-			entries: make([]*sdjournal.JournalEntry, 0, 200),
+			journal:       journal,
+			entries:       make([]*JournalEntry, 0, 200),
+			entriesByUnit: make(map[string][]*JournalEntry),
 		}
 		return cache, nil
 	}
