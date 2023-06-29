@@ -1,0 +1,60 @@
+name: Acceptance
+
+on:
+  workflow_run:
+    workflows: [Release]
+    types:
+      - completed
+  workflow_dispatch:
+
+jobs:
+  journalfs_latest:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Get latest journalfs URL
+      run: |
+        url=$(curl --silent "https://api.github.com/repos/awfulcooking/journalfs/releases/latest" | jq -r 'first(.assets[] | select(.name=="journalfs")) | .browser_download_url')
+        echo "::set-output name=url::$url"
+      shell: bash
+
+  journalfs_unit_latest:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Get latest journalfs.service URL
+      run: |
+        url=$(curl --silent "https://api.github.com/repos/awfulcooking/journalfs/releases/latest" | jq -r 'first(.assets[] | select(.name=="journalfs.service")) | .browser_download_url')
+        echo "::set-output name=url::$url"
+      shell: bash
+
+  try_it:
+    runs-on: ubuntu-latest
+    needs: [journalfs_latest, journalfs_unit_latest]
+    steps:
+    - name: Download release
+      run: |
+        wget "${{ needs.journalfs_latest.outputs.url }}"
+        wget "${{ needs.journalfs_unit_latest.outputs.url }}"
+        chmod +x journalfs
+    - name: Install it
+      run: |
+        sudo install -m 755 journalfs /usr/bin/journalfs
+        sudo install -m 755 journalfs /usr/lib/systemd/system/journalfs.service
+
+        sudo mkdir /journal
+        sudo useradd --system --user-group journalfs
+        sudo useradd -aG journalfs $USER
+
+        sudo systemctl daemon-reload
+        sudo systemctl enable --now journalfs
+    - name: List /journal
+      run: |
+        sudo ls -1p /journal/
+    - name: List /journal as non-root
+      run: |
+        ls -1p /journal/
+      continue-on-error: true
+    - name: Look for service/ and scope/
+      run: |
+        sudo ls -1p /journal/ | grep service
+        sudo ls -1p /journal/ | grep scope
+        echo "Success!"
