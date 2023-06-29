@@ -15,6 +15,9 @@ jobs:
       run: |
         sudo apt-get update
         sudo apt-get install -y jq fuse
+    - name: Enable user_allow_other (/etc/fuse.conf)
+      run: |
+        echo "user_allow_other" | sudo tee -a /etc/fuse.conf
     - name: Get latest journalfs
       run: |
         url=$(curl --silent "https://api.github.com/repos/awfulcooking/journalfs/releases/latest" | jq -r 'first(.assets[] | select(.name=="journalfs")) | .browser_download_url')
