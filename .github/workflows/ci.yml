@@ -10,6 +10,11 @@ jobs:
       uses: actions/setup-go@v4
       with:
         go-version: '1.20'
+    
+    - name: Install libsystemd-dev
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y libsystemd-dev
 
     - name: Checkout
       uses: actions/checkout@v2
