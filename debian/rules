@@ -1,0 +1,13 @@
+#!/usr/bin/make -f
+
+DESTDIR ?= $(CURDIR)/debian/journalfs
+
+%:
+	dh "$@"
+
+override_dh_auto_build:
+	make
+
+override_dh_auto_install:
+	mkdir -p ${DESTDIR}
+	PREFIX=${DESTDIR} make install

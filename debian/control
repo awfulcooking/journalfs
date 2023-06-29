@@ -1,0 +1,12 @@
+Source: journalfs
+Section: utils
+Priority: optional
+Maintainer: mooff <mooff@awful.cooking>
+Build-Depends: debhelper (>= 9), golang-go
+Standards-Version: 3.9.8
+Homepage: https://github.com/awfulcooking/journalfs
+
+Package: journalfs
+Architecture: any
+Depends: ${misc:Depends}, ${shlibs:Depends}
+Description: Golang FUSE filesystem, presents the systemd journal as a tree of .log files.

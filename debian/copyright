@@ -1,0 +1,8 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: journalfs
+Upstream-Contact: mooff <mooff@awful.cooking>
+Source: https://github.com/awfulcooking/journalfs
+
+Files: *
+Copyright: 2021-2023 mooff <mooff@awful.cooking>
+License: GPL-3.0+
