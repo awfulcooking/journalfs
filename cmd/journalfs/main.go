@@ -8,7 +8,7 @@ import (
 	"os/signal"
 	"syscall"
 
-	"github.com/coreos/go-systemd/util"
+	"github.com/coreos/go-systemd/v22/util"
 
 	"github.com/awfulcooking/journalfs/journalcache"
 	"github.com/awfulcooking/journalfs/mount"

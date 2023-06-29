@@ -3,7 +3,7 @@ package journalcache
 import (
 	"time"
 
-	"github.com/coreos/go-systemd/sdjournal"
+	"github.com/coreos/go-systemd/v22/sdjournal"
 )
 
 type JournalEntry struct {

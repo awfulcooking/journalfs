@@ -5,7 +5,7 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/coreos/go-systemd/sdjournal"
+	"github.com/coreos/go-systemd/v22/sdjournal"
 )
 
 var unit = flag.String("unit", "", "systemd unit name")
