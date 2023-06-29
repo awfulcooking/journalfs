@@ -4,15 +4,16 @@
 
 ## Build
 
-1. `apt install libsystemd-dev golang fuse3`
-1. `echo "user_allow_other" | sudo tee -a /etc/fuse.conf`
+1. `sudo apt install libsystemd-dev golang fuse3`
 1. `make`
 
 ## Install
 
-1. `make install`
+1. `sudo apt install fuse3`
+2. `echo "user_allow_other" | sudo tee -a /etc/fuse.conf`
+3. `sudo make install`
 
-2. Create a system user and group
+4. Create a system user and group
 
 ```bash
 sudo useradd --system --user-group journalfs
@@ -22,7 +23,7 @@ sudo usermod -aG journalfs $USER
 
   Note, you'll have to start a new shell or desktop session to activate $USER's group membership.
 
-3. Create a mount point, set ownership and permissions:
+5. Create a mount point, set ownership and permissions:
 
 ```
 sudo mkdir /journal
@@ -30,7 +31,7 @@ sudo chown journalfs:journalfs /journal
 sudo chmod 750 /journal
 ```
 
-4. Install the service:
+6. Install the service:
 
 ```
 sudo cp contrib/journalfs.service /etc/systemd/system/
