@@ -28,6 +28,11 @@ func NewUnitLogFile(jc *journalcache.JournalCache, unit string) *UnitLogFile {
 	}
 }
 
+func (f *UnitLogFile) Open(ctx context.Context, req *fuse.OpenRequest, resp *fuse.OpenResponse) (fs.Handle, error) {
+	resp.Flags |= fuse.OpenDirectIO
+	return f, nil
+}
+
 func (f *UnitLogFile) Attr(ctx context.Context, attr *fuse.Attr) error {
 	attr.Valid = 0
 
