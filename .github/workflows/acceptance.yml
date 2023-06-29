@@ -11,7 +11,7 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - name: Install jq, fuse
+    - name: Install jq, fuse3
       run: |
         sudo apt-get update
         sudo apt-get install -y jq fuse
