@@ -1,7 +1,7 @@
 .PHONY: default install
 
 now := $(shell date +'%Y-%m-%d%S%S%z')
-version := $(shell git describe --always --dirty)
+version := $(shell git describe --always --dirty --tags)
 
 PREFIX ?= /usr/local
 
