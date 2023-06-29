@@ -17,7 +17,7 @@ jobs:
     - name: Install jq, fuse3
       run: |
         sudo apt-get update
-        sudo apt-get install -y jq fuse
+        sudo apt-get install -y jq fuse3
     - name: Enable user_allow_other (/etc/fuse.conf)
       run: |
         echo "user_allow_other" | sudo tee -a /etc/fuse.conf
@@ -37,8 +37,6 @@ jobs:
 
         sudo usermod -aG systemd-journal journalfs
         sudo usermod -aG journalfs $USER
-
-        sudo ls -al /dev/fuse
 
         sudo mkdir /journal
         sudo chown journalfs:journalfs /journal
