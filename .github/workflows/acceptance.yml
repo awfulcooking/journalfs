@@ -30,20 +30,20 @@ jobs:
       run: |
         chmod +x journalfs
 
-        sudo install -m 755 journalfs /usr/bin/journalfs
-        sudo install -m 755 journalfs.service /usr/lib/systemd/system/journalfs.service
-
         sudo useradd --system --user-group journalfs
         sudo usermod -aG journalfs $USER
 
         sudo mkdir /journal
         sudo chown journalfs:journalfs /journal
 
+        sudo install -m 755 journalfs /usr/bin/journalfs
+        sudo install -m 755 journalfs.service /usr/lib/systemd/system/journalfs.service
+
         sudo systemctl daemon-reload
         sudo systemctl enable --now journalfs.service
 
         sleep 2
-        sudo journalctl -u journalfs.service
+        sudo journalctl -n 100 -u journalfs.service
         sudo systemctl status journalfs.service
     - name: List /journal
       run: |
