@@ -11,4 +11,5 @@ journalfs:
 	        go build -ldflags '-X main.buildTime=${now} -X main.version=${version}' ./cmd/journalfs
 
 install: journalfs
-	        install -m 755 journalfs $(PREFIX)/bin
+	        install -Dm 755 journalfs $(PREFIX)/bin/journalfs
+	        install -Dm 755 contrib/journalfs.service $(PREFIX)/usr/lib/systemd/system/journalfs.service
