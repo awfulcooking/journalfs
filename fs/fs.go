@@ -1,6 +1,8 @@
 package fs
 
 import (
+	"os"
+
 	bzfs "bazil.org/fuse/fs"
 
 	"github.com/awfulcooking/journalfs/journalcache"
@@ -21,3 +23,6 @@ func NewFS(journalCache *journalcache.JournalCache) *FS {
 		journalCache: journalCache,
 	}
 }
+
+var UID = uint32(os.Getuid())
+var GID = uint32(os.Getgid())
