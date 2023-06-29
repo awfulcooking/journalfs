@@ -11,10 +11,10 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-    - name: Install jq
+    - name: Install jq, fuse
       run: |
         sudo apt-get update
-        sudo apt-get install -y jq
+        sudo apt-get install -y jq fuse
     - name: Get latest journalfs
       run: |
         url=$(curl --silent "https://api.github.com/repos/awfulcooking/journalfs/releases/latest" | jq -r 'first(.assets[] | select(.name=="journalfs")) | .browser_download_url')
