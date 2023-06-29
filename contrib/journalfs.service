@@ -1,0 +1,13 @@
+[Unit]
+Description=journalfs FUSE Filesystem
+
+[Service]
+Type=simple
+Restart=yes
+User=journalfs
+Group=journalfs
+ExecStopPost=/usr/bin/umount -l /journal
+ExecStart=/usr/bin/env journalfs -follow -allowOther -p /journal
+
+[Install]
+WantedBy=multi-user.target
