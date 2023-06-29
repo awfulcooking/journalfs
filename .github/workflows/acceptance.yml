@@ -43,6 +43,7 @@ jobs:
         sudo systemctl enable --now journalfs.service
 
         sleep 2
+        sudo journalctl -u journalfs.service
         sudo systemctl status journalfs.service
     - name: List /journal
       run: |
