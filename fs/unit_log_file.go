@@ -10,7 +10,7 @@ import (
 	"bazil.org/fuse"
 	"bazil.org/fuse/fs"
 	"bazil.org/fuse/fuseutil"
-	"github.com/togetherbeer/journalfs/journalcache"
+	"github.com/awfulcooking/journalfs/journalcache"
 )
 
 type UnitLogFile struct {

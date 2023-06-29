@@ -5,7 +5,7 @@ import (
 	"flag"
 	"fmt"
 
-	"github.com/togetherbeer/journalfs/journalcache"
+	"github.com/awfulcooking/journalfs/journalcache"
 )
 
 var unit = flag.String("unit", "", "systemd unit name")

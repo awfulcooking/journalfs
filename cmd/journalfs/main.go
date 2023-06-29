@@ -10,8 +10,8 @@ import (
 
 	"github.com/coreos/go-systemd/util"
 
-	"github.com/togetherbeer/journalfs/journalcache"
-	"github.com/togetherbeer/journalfs/mount"
+	"github.com/awfulcooking/journalfs/journalcache"
+	"github.com/awfulcooking/journalfs/mount"
 )
 
 var mountPath = flag.String("p", "/var/log/journalfs", "mount path")

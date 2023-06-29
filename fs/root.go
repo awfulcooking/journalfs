@@ -3,7 +3,7 @@ package fs
 import (
 	"bazil.org/fuse/fs"
 
-	"github.com/togetherbeer/journalfs/journalcache"
+	"github.com/awfulcooking/journalfs/journalcache"
 )
 
 type Root struct {

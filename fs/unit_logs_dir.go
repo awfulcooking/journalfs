@@ -9,7 +9,7 @@ import (
 	"bazil.org/fuse"
 	bzfs "bazil.org/fuse/fs"
 
-	"github.com/togetherbeer/journalfs/journalcache"
+	"github.com/awfulcooking/journalfs/journalcache"
 )
 
 type UnitLogsDir struct {
