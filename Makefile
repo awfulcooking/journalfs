@@ -8,7 +8,7 @@ PREFIX ?= /usr/local
 default: journalfs
 
 journalfs:
-	        go build -o journalfs cmd/journalfs
+	        go build -o journalfs ./cmd/journalfs
 
 install: journalfs
 	        install -m 755 journalfs $(PREFIX)/bin
