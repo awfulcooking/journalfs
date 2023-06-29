@@ -11,6 +11,10 @@ jobs:
   journalfs_latest:
     runs-on: ubuntu-latest
     steps:
+    - name: Install jq
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y jq
     - name: Get latest journalfs URL
       run: |
         url=$(curl --silent "https://api.github.com/repos/awfulcooking/journalfs/releases/latest" | jq -r 'first(.assets[] | select(.name=="journalfs")) | .browser_download_url')
@@ -20,6 +24,10 @@ jobs:
   journalfs_unit_latest:
     runs-on: ubuntu-latest
     steps:
+    - name: Install jq
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y jq
     - name: Get latest journalfs.service URL
       run: |
         url=$(curl --silent "https://api.github.com/repos/awfulcooking/journalfs/releases/latest" | jq -r 'first(.assets[] | select(.name=="journalfs.service")) | .browser_download_url')
