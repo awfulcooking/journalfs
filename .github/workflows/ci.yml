@@ -17,10 +17,14 @@ jobs:
     - name: Make
       run: make
 
-    - name: Upload artifact
+    - name: Upload journalfs
       uses: actions/upload-artifact@v2
       with:
-      - name: journalfs
+        name: journalfs
         path: ./journalfs
-      - name: journalfs.service
+
+    - name: Upload journalfs.service
+      uses: actions/upload-artifact@v2
+      with:
+        name: journalfs.service
         path: ./contrib/journalfs.service
