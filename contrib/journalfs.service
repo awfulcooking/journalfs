@@ -3,7 +3,7 @@ Description=journalfs FUSE Filesystem
 
 [Service]
 Type=simple
-Restart=yes
+Restart=on-failure
 User=journalfs
 Group=journalfs
 ExecStopPost=/usr/bin/umount -l /journal
