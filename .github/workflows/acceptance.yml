@@ -34,7 +34,11 @@ jobs:
         chmod +x journalfs
 
         sudo useradd --system --user-group journalfs
+
+        sudo usermod -aG systemd-journal journalfs
         sudo usermod -aG journalfs $USER
+
+        sudo ls -al /dev/fuse
 
         sudo mkdir /journal
         sudo chown journalfs:journalfs /journal
