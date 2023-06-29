@@ -29,14 +29,15 @@ func NewUnitLogFile(jc *journalcache.JournalCache, unit string) *UnitLogFile {
 }
 
 func (f *UnitLogFile) Attr(ctx context.Context, attr *fuse.Attr) error {
+	attr.Valid = 0
+
 	attr.Uid = UID
 	attr.Gid = GID
 	attr.Mode = 0o440
 	attr.Size = uint64(len(f.data()))
 	attr.Mtime = f.modifiedTime()
 	attr.Atime = time.Now()
-
-	attr.Valid = 0
+	attr.Ctime = time.Now()
 
 	if f.journalCache.Debug {
 		log.Println(f, "Attr", "|", "modified", attr.Mtime, "size", attr.Size)

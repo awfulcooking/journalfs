@@ -4,6 +4,7 @@ import (
 	"context"
 	"os"
 	"syscall"
+	"time"
 
 	"bazil.org/fuse"
 	"bazil.org/fuse/fs"
@@ -31,10 +32,14 @@ var _ fs.NodeStringLookuper = (*UnitTypesDir)(nil)
 
 // Attr populates filesystem metadata for a UnitTypesDir
 func (d *UnitTypesDir) Attr(ctx context.Context, attr *fuse.Attr) error {
+	attr.Valid = 0
+
 	attr.Uid = UID
 	attr.Gid = GID
 	attr.Mode = os.ModeDir | 0o550
 	attr.Size = uint64(len(d.typeDirs))
+	attr.Ctime = time.Now()
+	attr.Mtime = time.Now()
 
 	return nil
 }
