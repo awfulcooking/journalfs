@@ -1,6 +1,9 @@
 name: Acceptance
 
 on:
+  push:
+    paths:
+      - '.github/workflows/acceptance.yml'
   workflow_run:
     workflows: [Release]
     types:
