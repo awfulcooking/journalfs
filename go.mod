@@ -1,4 +1,4 @@
-module github.com/togetherbeer/journalfs
+module github.com/awfulcooking/journalfs
 
 go 1.15
 
