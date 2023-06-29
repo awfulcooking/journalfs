@@ -21,17 +21,17 @@ jobs:
         wget $url
     - name: Get latest journalfs.service
       run: |
-        url=$(curl --silent "https://api.github.com/repos/awfulcooking/journalfs/releases/latest" | jq -r 'first(.assets[] | select(.name=="journalfs")) | .browser_download_url')
+        url=$(curl --silent "https://api.github.com/repos/awfulcooking/journalfs/releases/latest" | jq -r 'first(.assets[] | select(.name=="journalfs.service")) | .browser_download_url')
         wget $url
     - name: Install it
       run: |
         chmod +x journalfs
 
         sudo install -m 755 journalfs /usr/bin/journalfs
-        sudo install -m 755 journalfs /usr/lib/systemd/system/journalfs.service
+        sudo install -m 755 journalfs.service /usr/lib/systemd/system/journalfs.service
 
         sudo useradd --system --user-group journalfs
-        sudo useradd -aG journalfs $USER
+        sudo usermod -aG journalfs $USER
 
         sudo mkdir /journal
         sudo chown journalfs:journalfs /journal
